@@ -19,6 +19,16 @@ socket.on('message', (message) => {
     msg.insertAdjacentHTML('beforeend', html)
 
 })
+socket.on('output-messages', (messages) => {
+    messages.forEach(message => {
+        const html = Mustache.render(msgTemplate, {
+            username: message.sender,
+            message: message.content,
+            createdAt: moment(message.createdAt).format('h:mm A')
+        });
+        msg.insertAdjacentHTML('beforeend', html);
+    });
+});
 
 socket.on('dataRoom', ({ room, users }) => {
     const html = Mustache.render(sidebarTemplate, {
@@ -27,6 +37,9 @@ socket.on('dataRoom', ({ room, users }) => {
     })
     document.querySelector('.sidebar').innerHTML = html
 })
+// Add event listeners for edit and delete buttons
+// Client-side code
+
 
 msgForm.addEventListener('submit', (e) => {
     e.preventDefault()
